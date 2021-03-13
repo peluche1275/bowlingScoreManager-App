@@ -71,6 +71,8 @@ class bowlingGameManager {
                 this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille";
             } else {
                 this.playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory);
+                const indexOfCurrentSlot = IndexOfSlotToFill;
+                this.checkIfPlayerFinish(indexOfCurrentSlot, throwHistory, playerNumero);
             }
 
             event.preventDefault();
@@ -79,17 +81,32 @@ class bowlingGameManager {
 
     setTheEnterScoreInTheDashboardButton(playerNumero) {
         const name = this.playersInformations[playerNumero].name
-        const score = document.getElementById("test").innerHTML;
+        const self = this;
 
         this.scoreboard.buttonsEnterScore[playerNumero].addEventListener("click", function(event) {
-            var xhr = new XMLHttpRequest();
+
+            const date = self.determinateDate();
+            const score = self.playersInformations[playerNumero].totalScore;
+
+            self.scoreboard.buttonsEnterScore[playerNumero].disabled = true;
+            self.scoreboard.buttonsEnterScore[playerNumero].innerHTML = "Envoyé!";
+
+            const xhr = new XMLHttpRequest();
             xhr.open("POST", '/dashboard', true);
-
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify({ "name": name, "score": score, "date": date }));
 
-            xhr.send(JSON.stringify({ "name": name, "score": score }))
             event.preventDefault();
         });
+    }
+
+    determinateDate() {
+        let current = new Date();
+        let month = (current.getMonth() + 1);
+        if (month < 10) {
+            month = "0" + month;
+        }
+        return (current.getDate() + "/" + month + "/" + current.getFullYear());
     }
 
     playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory) {
@@ -108,8 +125,39 @@ class bowlingGameManager {
         this.scoreboard.showFrameScore(playerNumero, frameThrow, frameHistory);
 
         const totalScore = this.scoreCalculator.calculateActualTotalScore(this.playersInformations[playerNumero]);
-
+        this.playersInformations[playerNumero].totalScore = totalScore;
         this.scoreboard.showActualTotalScore(playerNumero, totalScore);
+    }
+
+    checkIfPlayerFinish(IndexOfCurrentSlot, throwHistory, playerNumero) {
+        if (IndexOfCurrentSlot == 19) {
+            if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
+                this.scoreboard.buttonAddThrows[playerNumero].disabled = true;
+                this.scoreboard.buttonsEnterScore[playerNumero].style.display = "block";
+                this.playersInformations[playerNumero].endOfTheGame = true;
+            }
+        } else if (IndexOfCurrentSlot == 20) {
+            this.scoreboard.buttonAddThrows[playerNumero].disabled = true;
+            this.scoreboard.buttonsEnterScore[playerNumero].style.display = "block";
+            this.playersInformations[playerNumero].endOfTheGame = true;
+        }
+    }
+
+    checkIfAllPlayersFinish() {
+        let allPlayersFinished = true;
+        this.playersInformations.forEach(playerInformation => {
+            if (playerInformation.endOfTheGame == false) {
+                allPlayersFinished = false;
+            }
+        });
+
+        if (allPlayersFinished) {
+            this.showTheWinner();
+        };
+    }
+
+    showTheWinner() {
+        console.log("FEATURE IS COMING")
     }
 
     setAbandonButtonHandler() {

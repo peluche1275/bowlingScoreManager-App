@@ -32,11 +32,11 @@ async function searchTheLastGames() {
     return array
 }
 
-async function addToTheDashboard(name, score) {
+async function addToTheDashboard(name, score, date) {
     const database = client.db("bowling");
     const dashboard = database.collection("dashboard");
-    const document = { name: name, score: score };
-    await dashboard.insertOne(document)
+    const doc = { name: name, score: score, date: date };
+    await dashboard.insertOne(doc)
 }
 
 exports.dataBaseManager = { connectionToTheDatabase, searchTheBetterGames, searchTheLastGames, addToTheDashboard };

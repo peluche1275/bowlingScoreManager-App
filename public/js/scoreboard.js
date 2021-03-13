@@ -17,7 +17,7 @@ class scoreboard {
         const arrayToReturn = [];
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
-            const playerInformation = { name: input, throwHistory: [], frameHistory: [], indexOfTheFirstThrowOfTheCurrentFrame: 0 }
+            const playerInformation = { name: input, throwHistory: [], frameHistory: [], indexOfTheFirstThrowOfTheCurrentFrame: 0, totalScore: 0, endOfTheGame: false }
             arrayToReturn.push(playerInformation);
         }
         return arrayToReturn;
