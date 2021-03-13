@@ -13,6 +13,7 @@ class bowlingGameManager {
         this.formRequest.buttonStart.addEventListener("click", (event) => {
             this.requestTheNumbersOfPlayers();
             this.formRequest.buttonStart.style.display = "none";
+            document.getElementById("dashboard").style.display = "none"
             event.preventDefault();
         });
     }
@@ -48,27 +49,47 @@ class bowlingGameManager {
             this.scoreboard.scoreboards[playerNumero].style.display = "block";
             this.setAbandonButtonHandler();
 
-            this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
-
-                const throwHistory = this.playersInformations[playerNumero].throwHistory;
-                const IndexOfSlotToFill = this.scoreboard.defineTheIndexOfSlotToFill(playerNumero);
-                const playerCanPlay = this.scoreCalculator.checkIfThePlayerCanPlay(IndexOfSlotToFill, throwHistory);
-                const previousThrow = throwHistory[throwHistory.length - 1];
-                const itIsTheSecondThrow = this.scoreCalculator.checkIfItIsTheSecondThrow(IndexOfSlotToFill);
-                const score = parseInt(this.scoreboard.scoreSelect[playerNumero].value);
-                const validScore = this.scoreCalculator.checkIfThePlayerCanEnterThisScore(score, previousThrow, IndexOfSlotToFill);
-
-                if (playerCanPlay === false) {
-                    this.errorMessage.innerHTML = "Vous avez atteint le nombre maximal de lancer";
-                } else if (itIsTheSecondThrow && validScore == false) {
-                    this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille";
-                } else {
-                    this.playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory);
-                }
-
-                event.preventDefault();
-            });
+            this.setTheButtonAddThrow(playerNumero);
+            this.setTheEnterScoreInTheDashboardButton(playerNumero);
         }
+    }
+
+    setTheButtonAddThrow(playerNumero) {
+        this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
+
+            const throwHistory = this.playersInformations[playerNumero].throwHistory;
+            const IndexOfSlotToFill = this.scoreboard.defineTheIndexOfSlotToFill(playerNumero);
+            const playerCanPlay = this.scoreCalculator.checkIfThePlayerCanPlay(IndexOfSlotToFill, throwHistory);
+            const previousThrow = throwHistory[throwHistory.length - 1];
+            const itIsTheSecondThrow = this.scoreCalculator.checkIfItIsTheSecondThrow(IndexOfSlotToFill);
+            const score = parseInt(this.scoreboard.scoreSelect[playerNumero].value);
+            const validScore = this.scoreCalculator.checkIfThePlayerCanEnterThisScore(score, previousThrow, IndexOfSlotToFill);
+
+            if (playerCanPlay === false) {
+                this.errorMessage.innerHTML = "Vous avez atteint le nombre maximal de lancer";
+            } else if (itIsTheSecondThrow && validScore == false) {
+                this.errorMessage.innerHTML = "Vous avez ne pouvez pas faire tomber autant de quille";
+            } else {
+                this.playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory);
+            }
+
+            event.preventDefault();
+        });
+    }
+
+    setTheEnterScoreInTheDashboardButton(playerNumero) {
+        const name = this.playersInformations[playerNumero].name
+        const score = document.getElementById("test").innerHTML;
+
+        this.scoreboard.buttonsEnterScore[playerNumero].addEventListener("click", function(event) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/dashboard', true);
+
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.send(JSON.stringify({ "name": name, "score": score }))
+            event.preventDefault();
+        });
     }
 
     playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory) {

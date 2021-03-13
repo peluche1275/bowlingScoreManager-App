@@ -6,6 +6,7 @@ class scoreboard {
         this.scoreSelect = document.getElementsByClassName("scoreboard_ScoreSelect")
         this.throwScoreboard = document.getElementsByClassName("throwScoreboard")
         this.buttonAbandon = document.getElementById("leaveButton");
+        this.buttonsEnterScore = document.getElementsByClassName("enterScoreButton")
     }
 
     setTheScoreboard() {
@@ -13,13 +14,13 @@ class scoreboard {
     }
 
     createThePlayerInformation(numberOfPlayers) {
+        const arrayToReturn = [];
         for (let i = 0; i < numberOfPlayers; i++) {
             const input = document.getElementById("input_" + i).value;
-            const arrayToReturn = [];
             const playerInformation = { name: input, throwHistory: [], frameHistory: [], indexOfTheFirstThrowOfTheCurrentFrame: 0 }
             arrayToReturn.push(playerInformation);
-            return arrayToReturn;
         }
+        return arrayToReturn;
     }
 
     addScoreToTheScoreboard(playerNumero, score) {

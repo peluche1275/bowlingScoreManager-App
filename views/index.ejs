@@ -4,42 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="./favicon.ico">
     <title>Bowling Game Manager</title>
 </head>
 
 <body>
     <h1>Bowling Game Manager</h1>
-    <div id="app">
-        <button id="startGame">Nouvelle Partie</button>
 
-        <form id="requestForm" class="hidden">
-            <label id="requestLabel">Définissez le nombre de joueur.</label>
-            <select id="requestSelect">
+    <% if (locals) { %>
+        <div id="dashboard">
+            <div id="lastGames">
+                <h2>Les dernières parties jouer :</h2>
+                <ul>
+                    <% locals.lastGames.forEach(function(player){ %>
+
+                        <li>
+                            <%= player.name %> a fait un score de
+                                <%= player.score %> le
+                                    <%= player.date %>
+                        </li>
+
+                        <% }); %>
+                </ul>
+            </div>
+            <div id="betterGames">
+                <h2>Les meilleurs parties jouer :</h2>
+                <ul>
+                    <% locals.betterGames.forEach(function(player){ %>
+
+                        <li>
+                            <%= player.name %> a fait un score de
+                                <%= player.score %> le
+                                    <%= player.date %>
+                        </li>
+
+                        <% }); %>
+                </ul>
+            </div>
+        </div>
+
+        <% } %>
+
+            <div id="app">
+                <button id="startGame">Nouvelle Partie</button>
+
+                <form id="requestForm" class="hidden">
+                    <label id="requestLabel">Définissez le nombre de joueur.</label>
+                    <select id="requestSelect">
                 <option value=1>1</option>
                 <option value=2>2</option>
                 <option value=3>3</option>
                 <option value=4>4</option>
             </select>
-            <button id="requestButton">Envoyer</button>
-        </form>
+                    <button id="requestButton">Envoyer</button>
+                </form>
 
-        <form id="enterPlayerNameForm" class="hidden">
-            <label id="label_0" class="hidden">Joueur n° 1</label>
-            <input id="input_0" class="hidden" type="text" minlength="4" maxlength="20" name="0">
-            <label id="label_1" class="hidden">Joueur n° 2</label>
-            <input id="input_1" class="hidden" type="text" minlength="4" maxlength="20" name="1">
-            <label id="label_2" class="hidden">Joueur n° 3</label>
-            <input id="input_2" class="hidden" type="text" minlength="4" maxlength="20" name="2">
-            <label id="label_3" class="hidden">Joueur n° 4</label>
-            <input id="input_3" class="hidden" type="text" minlength="4" maxlength="20" name="3">
-            <button id="enterPlayerNameButton">Envoyer</button>
-        </form>
+                <form id="enterPlayerNameForm" class="hidden">
+                    <label id="label_0" class="hidden">Joueur n° 1</label>
+                    <input id="input_0" class="hidden" type="text" minlength="4" maxlength="20" name="0">
+                    <label id="label_1" class="hidden">Joueur n° 2</label>
+                    <input id="input_1" class="hidden" type="text" minlength="4" maxlength="20" name="1">
+                    <label id="label_2" class="hidden">Joueur n° 3</label>
+                    <input id="input_2" class="hidden" type="text" minlength="4" maxlength="20" name="2">
+                    <label id="label_3" class="hidden">Joueur n° 4</label>
+                    <input id="input_3" class="hidden" type="text" minlength="4" maxlength="20" name="3">
+                    <button id="enterPlayerNameButton">Envoyer</button>
+                </form>
 
 
-        <div class="scoreboard hidden">
-            <p class="scoreboard_Name"></p>
-            <button class="scoreboard_Button">Ajouter Lancer</button>
-            <select class="scoreboard_ScoreSelect">
+                <div class="scoreboard hidden">
+                    <p class="scoreboard_Name"></p>
+                    <button class="scoreboard_Button">Ajouter Lancer</button>
+                    <select class="scoreboard_ScoreSelect">
                     <option value=0>0</option>
                     <option value=1>1</option>
                     <option value=2>2</option>
@@ -52,66 +88,67 @@
                     <option value=9>9</option>
                     <option value=10>10</option>
                 </select>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col" colspan="2">1</th>
-                        <th scope="col" colspan="2">2</th>
-                        <th scope="col" colspan="2">3</th>
-                        <th scope="col" colspan="2">4</th>
-                        <th scope="col" colspan="2">5</th>
-                        <th scope="col" colspan="2">6</th>
-                        <th scope="col" colspan="2">7</th>
-                        <th scope="col" colspan="2">8</th>
-                        <th scope="col" colspan="2">9</th>
-                        <th scope="col" colspan="3">10</th>
-                        <th scope="col" colspan="1">total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="throwScoreboard">
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td rowspan="2"></td>
-                    </tr>
-                    <tr class="frameScoreboard">
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="scoreboard hidden">
-            <p class="scoreboard_Name"></p>
-            <button class="scoreboard_Button">Ajouter Lancer</button>
-            <select class="scoreboard_ScoreSelect">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="2">1</th>
+                                <th scope="col" colspan="2">2</th>
+                                <th scope="col" colspan="2">3</th>
+                                <th scope="col" colspan="2">4</th>
+                                <th scope="col" colspan="2">5</th>
+                                <th scope="col" colspan="2">6</th>
+                                <th scope="col" colspan="2">7</th>
+                                <th scope="col" colspan="2">8</th>
+                                <th scope="col" colspan="2">9</th>
+                                <th scope="col" colspan="3">10</th>
+                                <th scope="col" colspan="1">total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="throwScoreboard">
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td id="test" rowspan="2"></td>
+                            </tr>
+                            <tr class="frameScoreboard">
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                </div>
+                <div class="scoreboard hidden">
+                    <p class="scoreboard_Name"></p>
+                    <button class="scoreboard_Button">Ajouter Lancer</button>
+                    <select class="scoreboard_ScoreSelect">
                     <option value=0>0</option>
                     <option value=1>1</option>
                     <option value=2>2</option>
@@ -124,66 +161,67 @@
                     <option value=9>9</option>
                     <option value=10>10</option>
                 </select>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col" colspan="2">1</th>
-                        <th scope="col" colspan="2">2</th>
-                        <th scope="col" colspan="2">3</th>
-                        <th scope="col" colspan="2">4</th>
-                        <th scope="col" colspan="2">5</th>
-                        <th scope="col" colspan="2">6</th>
-                        <th scope="col" colspan="2">7</th>
-                        <th scope="col" colspan="2">8</th>
-                        <th scope="col" colspan="2">9</th>
-                        <th scope="col" colspan="3">10</th>
-                        <th scope="col" colspan="1">total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="throwScoreboard">
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td rowspan="2"></td>
-                    </tr>
-                    <tr class="frameScoreboard">
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="scoreboard hidden">
-            <p class="scoreboard_Name"></p>
-            <button class="scoreboard_Button">Ajouter Lancer</button>
-            <select class="scoreboard_ScoreSelect">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="2">1</th>
+                                <th scope="col" colspan="2">2</th>
+                                <th scope="col" colspan="2">3</th>
+                                <th scope="col" colspan="2">4</th>
+                                <th scope="col" colspan="2">5</th>
+                                <th scope="col" colspan="2">6</th>
+                                <th scope="col" colspan="2">7</th>
+                                <th scope="col" colspan="2">8</th>
+                                <th scope="col" colspan="2">9</th>
+                                <th scope="col" colspan="3">10</th>
+                                <th scope="col" colspan="1">total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="throwScoreboard">
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td rowspan="2"></td>
+                            </tr>
+                            <tr class="frameScoreboard">
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                </div>
+                <div class="scoreboard hidden">
+                    <p class="scoreboard_Name"></p>
+                    <button class="scoreboard_Button">Ajouter Lancer</button>
+                    <select class="scoreboard_ScoreSelect">
                     <option value=0>0</option>
                     <option value=1>1</option>
                     <option value=2>2</option>
@@ -196,66 +234,67 @@
                     <option value=9>9</option>
                     <option value=10>10</option>
                 </select>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col" colspan="2">1</th>
-                        <th scope="col" colspan="2">2</th>
-                        <th scope="col" colspan="2">3</th>
-                        <th scope="col" colspan="2">4</th>
-                        <th scope="col" colspan="2">5</th>
-                        <th scope="col" colspan="2">6</th>
-                        <th scope="col" colspan="2">7</th>
-                        <th scope="col" colspan="2">8</th>
-                        <th scope="col" colspan="2">9</th>
-                        <th scope="col" colspan="3">10</th>
-                        <th scope="col" colspan="1">total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="throwScoreboard">
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td rowspan="2"></td>
-                    </tr>
-                    <tr class="frameScoreboard">
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="scoreboard hidden">
-            <p class="scoreboard_Name"></p>
-            <button class="scoreboard_Button">Ajouter Lancer</button>
-            <select class="scoreboard_ScoreSelect">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="2">1</th>
+                                <th scope="col" colspan="2">2</th>
+                                <th scope="col" colspan="2">3</th>
+                                <th scope="col" colspan="2">4</th>
+                                <th scope="col" colspan="2">5</th>
+                                <th scope="col" colspan="2">6</th>
+                                <th scope="col" colspan="2">7</th>
+                                <th scope="col" colspan="2">8</th>
+                                <th scope="col" colspan="2">9</th>
+                                <th scope="col" colspan="3">10</th>
+                                <th scope="col" colspan="1">total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="throwScoreboard">
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td rowspan="2"></td>
+                            </tr>
+                            <tr class="frameScoreboard">
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                </div>
+                <div class="scoreboard hidden">
+                    <p class="scoreboard_Name"></p>
+                    <button class="scoreboard_Button">Ajouter Lancer</button>
+                    <select class="scoreboard_ScoreSelect">
                     <option value=0>0</option>
                     <option value=1>1</option>
                     <option value=2>2</option>
@@ -268,67 +307,68 @@
                     <option value=9>9</option>
                     <option value=10>10</option>
                 </select>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col" colspan="2">1</th>
-                        <th scope="col" colspan="2">2</th>
-                        <th scope="col" colspan="2">3</th>
-                        <th scope="col" colspan="2">4</th>
-                        <th scope="col" colspan="2">5</th>
-                        <th scope="col" colspan="2">6</th>
-                        <th scope="col" colspan="2">7</th>
-                        <th scope="col" colspan="2">8</th>
-                        <th scope="col" colspan="2">9</th>
-                        <th scope="col" colspan="3">10</th>
-                        <th scope="col" colspan="1">total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="throwScoreboard">
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td scope="row"></td>
-                        <td rowspan="2"></td>
-                    </tr>
-                    <tr class="frameScoreboard">
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="2"></td>
-                        <td scope="row" colspan="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="2">1</th>
+                                <th scope="col" colspan="2">2</th>
+                                <th scope="col" colspan="2">3</th>
+                                <th scope="col" colspan="2">4</th>
+                                <th scope="col" colspan="2">5</th>
+                                <th scope="col" colspan="2">6</th>
+                                <th scope="col" colspan="2">7</th>
+                                <th scope="col" colspan="2">8</th>
+                                <th scope="col" colspan="2">9</th>
+                                <th scope="col" colspan="3">10</th>
+                                <th scope="col" colspan="1">total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="throwScoreboard">
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td rowspan="2"></td>
+                            </tr>
+                            <tr class="frameScoreboard">
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="2"></td>
+                                <td scope="row" colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                </div>
 
-    </div>
-    <p id="errorMessage"></p>
-    <button id="leaveButton">Abandonner</button>
-    </div>
+            </div>
+            <p id="errorMessage"></p>
+            <button id="leaveButton">Abandonner</button>
+            </div>
 </body>
 <script src="js/scoreCalculator.js"></script>
 <script src="js/scoreboard.js"></script>
@@ -336,6 +376,5 @@
 <script src="js/nameRegister.js"></script>
 <script src="js/bowlingGameManager.js"></script>
 <script src="js/main.js"></script>
-<!-- <script src="js/app.js"></script> -->
 
 </html>
