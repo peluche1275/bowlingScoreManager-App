@@ -51,6 +51,7 @@ class bowlingGameManager {
 
             this.setTheButtonAddThrow(playerNumero);
             this.setTheEnterScoreInTheDashboardButton(playerNumero);
+            this.setTheSharingButton(playerNumero);
         }
     }
 
@@ -73,6 +74,7 @@ class bowlingGameManager {
                 this.playTheThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, playerNumero, throwHistory);
                 const indexOfCurrentSlot = IndexOfSlotToFill;
                 this.checkIfPlayerFinish(indexOfCurrentSlot, throwHistory, playerNumero);
+                this.checkIfAllPlayersFinish();
             }
 
             event.preventDefault();
@@ -96,6 +98,14 @@ class bowlingGameManager {
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(JSON.stringify({ "name": name, "score": score, "date": date }));
 
+            event.preventDefault();
+        });
+    }
+
+    setTheSharingButton(playerNumero) {
+        const self = this;
+        this.scoreboard.buttonsSharing[playerNumero].addEventListener("click", function(event) {
+            self.scoreboard.createImageOfTheScoreboard(playerNumero);
             event.preventDefault();
         });
     }
@@ -134,11 +144,13 @@ class bowlingGameManager {
             if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
                 this.scoreboard.buttonAddThrows[playerNumero].disabled = true;
                 this.scoreboard.buttonsEnterScore[playerNumero].style.display = "block";
+                this.scoreboard.buttonsSharing[playerNumero].style.display = "block";
                 this.playersInformations[playerNumero].endOfTheGame = true;
             }
         } else if (IndexOfCurrentSlot == 20) {
             this.scoreboard.buttonAddThrows[playerNumero].disabled = true;
             this.scoreboard.buttonsEnterScore[playerNumero].style.display = "block";
+            this.scoreboard.buttonsSharing[playerNumero].style.display = "block";
             this.playersInformations[playerNumero].endOfTheGame = true;
         }
     }
@@ -157,7 +169,25 @@ class bowlingGameManager {
     }
 
     showTheWinner() {
-        console.log("FEATURE IS COMING")
+        let betterScore = 0;
+        this.playersInformations.forEach(player => {
+            if (player.totalScore > betterScore) {
+                betterScore = player.totalScore;
+            }
+        });
+        let winners = []
+        this.playersInformations.forEach(player => {
+            if (player.totalScore == betterScore) {
+                winners.push(player.name);
+            }
+        });
+
+        if (winners.length == 1) {
+            document.getElementById("winMessage").innerHTML = "Bravo le gagnant est : " + winners[0];
+        } else {
+            document.getElementById("winMessage").innerHTML = "Bravo les gagnants sont : " + winners.toString();
+        }
+
     }
 
     setAbandonButtonHandler() {

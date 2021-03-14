@@ -10,7 +10,7 @@
 
 <body>
     <h1>Bowling Game Manager</h1>
-
+    <span id="winMessage"></span>
     <% if (locals) { %>
         <div id="dashboard">
             <div id="lastGames">
@@ -143,7 +143,9 @@
                             </tr>
                         </tbody>
                     </table>
+
                     <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                    <button class="sharingButton hidden">Partager</button>
                 </div>
                 <div class="scoreboard hidden">
                     <p class="scoreboard_Name"></p>
@@ -217,6 +219,7 @@
                         </tbody>
                     </table>
                     <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                    <button class="sharingButton hidden">Partager</button>
                 </div>
                 <div class="scoreboard hidden">
                     <p class="scoreboard_Name"></p>
@@ -290,6 +293,7 @@
                         </tbody>
                     </table>
                     <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                    <button class="sharingButton hidden">Partager</button>
                 </div>
                 <div class="scoreboard hidden">
                     <p class="scoreboard_Name"></p>
@@ -363,6 +367,7 @@
                         </tbody>
                     </table>
                     <button class="enterScoreButton hidden">Entrer votre score dans le dashboard</button>
+                    <button class="sharingButton hidden">Partager</button>
                 </div>
 
             </div>
@@ -370,6 +375,7 @@
             <button id="leaveButton">Abandonner</button>
             </div>
 </body>
+<script src="js/dom-to-image.min.js"></script>
 <script src="js/scoreCalculator.js"></script>
 <script src="js/scoreboard.js"></script>
 <script src="js/formRequest.js"></script>

@@ -19,14 +19,16 @@ app.get('/', async(req, res) => {
     res.render("index", { betterGames, lastGames })
 })
 
+// app.get('/score', async(req, res) => {
+//     res.render("shareScore")
+// })
+
 app.post('/dashboard', async(req, res) => {
     const name = req.body.name;
     const score = req.body.score;
     const date = req.body.date;
 
     await dataBaseManager.addToTheDashboard(name, score, date);
-    console.log(req.body)
-
 })
 
 app.listen(process.env.PORT || 8080)
