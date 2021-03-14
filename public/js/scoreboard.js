@@ -1,13 +1,15 @@
 class scoreboard {
     constructor() {
-        this.scoreboards = document.getElementsByClassName("scoreboard");
-        this.buttonAddThrows = document.getElementsByClassName("scoreboard_Button");
-        this.displayedNames = document.getElementsByClassName("scoreboard_Name");
+        this.scoreboards = document.getElementsByClassName("scoreboard")
+        this.buttonAddThrows = document.getElementsByClassName("scoreboard_Button")
+        this.displayedNames = document.getElementsByClassName("scoreboard_Name")
         this.scoreSelect = document.getElementsByClassName("scoreboard_ScoreSelect")
         this.throwScoreboard = document.getElementsByClassName("throwScoreboard")
-        this.buttonAbandon = document.getElementById("leaveButton");
+        this.buttonAbandon = document.getElementById("leaveButton")
         this.buttonsEnterScore = document.getElementsByClassName("enterScoreButton")
         this.buttonsSharing = document.getElementsByClassName("sharingButton")
+        this.buttonsTwitter = document.getElementsByClassName("twitterButton")
+        this.buttonsFacebook = document.getElementsByClassName("facebookButton")
     }
 
     setTheScoreboard() {
@@ -71,21 +73,6 @@ class scoreboard {
         const box = throwScoreboard.getElementsByTagName("td")[21]
 
         box.innerHTML = totalScore;
-    }
-
-    createImageOfTheScoreboard(playerNumero) {
-
-        let node = this.scoreboards[playerNumero]
-
-        domtoimage.toPng(node)
-            .then(function(dataUrl) {
-                var img = new Image();
-                img.src = dataUrl;
-                // document.body.appendChild(img);
-            })
-            .catch(function(error) {
-                console.error('oops, something went wrong!', error);
-            });
     }
 
 

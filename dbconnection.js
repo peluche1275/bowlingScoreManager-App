@@ -30,6 +30,14 @@ async function searchTheLastGames() {
         array.push({ name: doc.name, score: doc.score, date: doc.date })
     });
     return array
+
+}
+
+async function searchAGame(id) {
+    const database = client.db("bowling")
+    const dashboard = database.collection("score")
+    const idToFind = await dashboard.findOne({ id: id })
+    return idToFind
 }
 
 async function addToTheDashboard(name, score, date) {
@@ -39,4 +47,13 @@ async function addToTheDashboard(name, score, date) {
     await dashboard.insertOne(doc)
 }
 
-exports.dataBaseManager = { connectionToTheDatabase, searchTheBetterGames, searchTheLastGames, addToTheDashboard };
+async function addToTheScore(name, totalScore, throwHistory, frameHistory) {
+    const database = client.db("bowling")
+    const dashboard = database.collection("score")
+    const count = await dashboard.countDocuments()
+    const doc = { id: count, name: name, totalScore: totalScore, throwHistory: throwHistory, frameHistory: frameHistory }
+    await dashboard.insertOne(doc)
+    return count;
+}
+
+exports.dataBaseManager = { connectionToTheDatabase, searchTheBetterGames, searchTheLastGames, addToTheDashboard, addToTheScore, searchAGame };

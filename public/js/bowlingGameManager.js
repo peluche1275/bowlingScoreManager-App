@@ -105,9 +105,56 @@ class bowlingGameManager {
     setTheSharingButton(playerNumero) {
         const self = this;
         this.scoreboard.buttonsSharing[playerNumero].addEventListener("click", function(event) {
-            self.scoreboard.createImageOfTheScoreboard(playerNumero);
-            event.preventDefault();
-        });
+                const xhr = new XMLHttpRequest();
+
+                let response = null;
+
+                self.scoreboard.buttonsSharing[playerNumero].disabled = true;
+
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        response = this.response
+                    }
+                }
+
+                const throwFilled = self.scoreboard.scoreboards[playerNumero].getElementsByClassName("throwScoreboard")[0];
+                const td = throwFilled.getElementsByTagName("td")
+                const throwHistory = []
+
+                for (let i = 0; i < 21; i++) {
+                    if (td[i].innerHTML == null) {
+                        throwHistory.push(" ");
+                    } else {
+                        throwHistory.push(td[i].innerHTML);
+                    }
+                }
+
+                xhr.open("post", "/saveScore", false);
+
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                xhr.send(JSON.stringify({
+                    "name": self.playersInformations[playerNumero].name,
+                    "throwHistory": throwHistory,
+                    "frameHistory": self.playersInformations[playerNumero].frameHistory,
+                    "totalScore": self.playersInformations[playerNumero].totalScore
+                }));
+
+                console.log(response)
+                self.scoreboard.buttonsTwitter[playerNumero].style.display = "block"
+                self.scoreboard.buttonsTwitter[playerNumero].addEventListener("click", function() {
+                    window.location.href = ('https://twitter.com/intent/tweet?url=localhost:8080/score?id=' + response)
+                })
+
+                self.scoreboard.buttonsFacebook[playerNumero].style.display = "block"
+                self.scoreboard.buttonsFacebook[playerNumero].addEventListener("click", function() {
+                    window.location.href = ('https://www.facebook.com/sharer/sharer.php?u=localhost:8080/score?id=' + response)
+                })
+
+                event.preventDefault();
+            }
+
+        );
     }
 
     determinateDate() {

@@ -10,7 +10,8 @@
 
 <body>
     <h1>Bowling Game Manager</h1>
-    <h2>Partie de
+    <h2>
+        Partie de
         <%= locals.name %>
     </h2>
     <table>
@@ -31,41 +32,26 @@
         </thead>
         <tbody>
             <tr class="throwScoreboard">
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td rowspan="2"></td>
+                <% locals.throwHistory.forEach(element => { %>
+                    <td scope="row" colspan="1">
+                        <%=element%>
+                    </td>
+                    <% }); %>
+                        <td rowspan="2">
+                            <%= locals.totalScore %>
+                        </td>
             </tr>
             <tr class="frameScoreboard">
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="2"></td>
-                <td scope="row" colspan="3"></td>
+                <% locals.frameHistory.forEach(element => { %>
+                    <td scope="row" colspan="2">
+                        <%=element%>
+                    </td>
+                    <% }); %>
             </tr>
         </tbody>
     </table>
+
 </body>
+
+
+</html>
