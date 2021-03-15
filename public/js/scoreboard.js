@@ -12,56 +12,52 @@ class scoreboard {
         this.buttonsFacebook = document.getElementsByClassName("facebookButton")
     }
 
-    setTheScoreboard() {
-        this.displayTheScoreboardOfEachPlayer();
-    }
-
     createThePlayerInformation(numberOfPlayers) {
-        const arrayToReturn = [];
+        const arrayToReturn = []
         for (let i = 0; i < numberOfPlayers; i++) {
-            const input = document.getElementById("input_" + i).value;
+            const input = document.getElementById("input_" + i).value
             const playerInformation = { name: input, throwHistory: [], frameHistory: [], indexOfTheFirstThrowOfTheCurrentFrame: 0, totalScore: 0, endOfTheGame: false }
-            arrayToReturn.push(playerInformation);
+            arrayToReturn.push(playerInformation)
         }
-        return arrayToReturn;
+        return arrayToReturn
     }
 
     addScoreToTheScoreboard(playerNumero, score) {
-        const IndexOfSlotToFill = this.defineTheIndexOfSlotToFill(playerNumero);
-        const playerThrow = this.returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill);
-        const frameScore = this.returnTheFrameScore(playerNumero);
-        const actualTotalScore = this.calculateActualTotalScore(playerNumero);
+        const IndexOfSlotToFill = this.defineTheIndexOfSlotToFill(playerNumero)
+        const playerThrow = this.returnThePlayerThrow(playerNumero, score, IndexOfSlotToFill)
+        const frameScore = this.returnTheFrameScore(playerNumero)
+        const actualTotalScore = this.calculateActualTotalScore(playerNumero)
 
-        this.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow);
-        this.showFrameScore(playerNumero, frameScore);
-        this.showActualTotalScore(playerNumero, actualTotalScore);
+        this.displayThePlayerThrow(playerNumero, IndexOfSlotToFill, playerThrow)
+        this.showFrameScore(playerNumero, frameScore)
+        this.showActualTotalScore(playerNumero, actualTotalScore)
     }
 
     defineTheIndexOfSlotToFill(playerNumero) {
-        const box = this.throwScoreboard[playerNumero].getElementsByTagName("td");
+        const box = this.throwScoreboard[playerNumero].getElementsByTagName("td")
 
         for (let i = 0; i < 21; i++) {
             if (box[i].innerHTML === "") {
-                return i;
+                return i
             }
         }
     }
 
     displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
-        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero]
         const box = throwScoreboard.getElementsByTagName("td");
 
         if (score === "X" && IndexOfSlotToFill < 17) {
-            box[IndexOfSlotToFill].innerHTML = " ";
-            box[IndexOfSlotToFill + 1].innerHTML = "X";
+            box[IndexOfSlotToFill].innerHTML = " "
+            box[IndexOfSlotToFill + 1].innerHTML = "X"
         } else if (score != null) {
-            box[IndexOfSlotToFill].innerHTML = score;
+            box[IndexOfSlotToFill].innerHTML = score
         }
     }
 
     showFrameScore(playerNumero, score, frameHistory) {
-        const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero];
-        const box = frameScoreboard.getElementsByTagName("td");
+        const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero]
+        const box = frameScoreboard.getElementsByTagName("td")
 
         if (score != null) {
             box[frameHistory.length - 1].innerHTML = score
@@ -69,12 +65,9 @@ class scoreboard {
     }
 
     showActualTotalScore(playerNumero, totalScore) {
-        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero];
+        const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero]
         const box = throwScoreboard.getElementsByTagName("td")[21]
 
-        box.innerHTML = totalScore;
+        box.innerHTML = totalScore
     }
-
-
-
 }
