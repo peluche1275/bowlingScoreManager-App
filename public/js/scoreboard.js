@@ -58,7 +58,6 @@ class scoreboard {
     showFrameScore(playerNumero, score, frameHistory) {
         const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero]
         const box = frameScoreboard.getElementsByTagName("td")
-        console.log(frameHistory)
         if (score != null) {
             box[frameHistory.length - 1].innerHTML = score
         }

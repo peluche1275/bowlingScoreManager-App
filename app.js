@@ -35,7 +35,6 @@ app.post('/dashboard', async(req, res) => {
     const name = req.body.name
     const score = req.body.score
     const date = req.body.date
-
     await dataBaseManager.addGameInformationToTheDashboardCollection(name, score, date)
 })
 

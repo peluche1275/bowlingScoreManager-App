@@ -30,7 +30,7 @@ class scoreCalculator {
 
         if (score === 10) {
             if (throwHistory[throwHistory.length - 1] === 0 && (IndexOfSlotToFill % 2) != 0) {
-                console.log("NO PROBLEM")
+                itIsAStrike = false
             } else {
                 itIsAStrike = true
             }
@@ -58,7 +58,6 @@ class scoreCalculator {
         if (score == "/") {
             score = 10 - throwHistory[throwHistory.length - 1]
         }
-
         throwHistory.push(score)
     }
 
@@ -81,7 +80,6 @@ class scoreCalculator {
         const secondThrow = playerInformation.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 1]
         const thirdThrow = playerInformation.throwHistory[indexOfTheFirstThrowOfTheCurrentFrame + 2]
         const currentFrame = firstThrow + secondThrow
-
         let score = undefined
 
         const conditionForCalculateAStrike = firstThrow === "X" && secondThrow != null && thirdThrow != null
@@ -151,7 +149,6 @@ class scoreCalculator {
             playerCanPlay: this.checkIfThePlayerCanPlay(throwInformation.IndexOfSlotToFill, throwInformation.throwHistory),
             validScore: this.checkIfThePlayerCanEnterThisScore(throwInformation.score, throwInformation.previousThrow, throwInformation.IndexOfSlotToFill)
         }
-
     }
 
     determinateIfPlayerCantDoTheThrow(checkCondition) {
@@ -164,5 +161,4 @@ class scoreCalculator {
         }
         return errorMessage
     }
-
 }
