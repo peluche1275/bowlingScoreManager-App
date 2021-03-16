@@ -45,7 +45,7 @@ class scoreboard {
 
     displayThePlayerThrow(playerNumero, IndexOfSlotToFill, score) {
         const throwScoreboard = document.getElementsByClassName("throwScoreboard")[playerNumero]
-        const box = throwScoreboard.getElementsByTagName("td");
+        const box = throwScoreboard.getElementsByTagName("td")
 
         if (score === "X" && IndexOfSlotToFill < 17) {
             box[IndexOfSlotToFill].innerHTML = " "
@@ -58,7 +58,7 @@ class scoreboard {
     showFrameScore(playerNumero, score, frameHistory) {
         const frameScoreboard = document.getElementsByClassName("frameScoreboard")[playerNumero]
         const box = frameScoreboard.getElementsByTagName("td")
-
+        console.log(frameHistory)
         if (score != null) {
             box[frameHistory.length - 1].innerHTML = score
         }

@@ -13,17 +13,17 @@ async function connectionToTheDatabase() {
 
 async function searchTheBetterGamesInformations() {
     let BetterGamesInformations = []
-    const dashboard = connectToCollection("dashboard");
+    const dashboard = connectToCollection("dashboard")
     await dashboard.find().sort({ score: -1 }).limit(10).forEach(function(doc) {
         BetterGamesInformations.push({ name: doc.name, score: doc.score, date: doc.date })
-    });
+    })
     return BetterGamesInformations
 }
 
 function connectToCollection(collection) {
     const database = client.db("bowling")
-    const dashboard = database.collection(collection)
-    return dashboard
+    const collectionToUse = database.collection(collection)
+    return collectionToUse
 }
 
 async function searchTheLastGamesInformations() {
@@ -31,7 +31,7 @@ async function searchTheLastGamesInformations() {
     const dashboard = connectToCollection("dashboard")
     await dashboard.find().limit(10).forEach(function(doc) {
         LastGamesInformations.push({ name: doc.name, score: doc.score, date: doc.date })
-    });
+    })
     return LastGamesInformations
 }
 

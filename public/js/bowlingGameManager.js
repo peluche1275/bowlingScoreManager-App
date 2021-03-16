@@ -78,7 +78,9 @@ class bowlingGameManager {
     }
 
     manageTheFrameThrow(frameInformation, playerNumero) {
-        return this.scoreCalculator.returnTheFrameScore(frameInformation.indexOfTheFirstThrowOfTheCurrentFrame, this.playersInformations[playerNumero])
+        const frameThrow = this.scoreCalculator.returnTheFrameScore(frameInformation.indexOfTheFirstThrowOfTheCurrentFrame, this.playersInformations[playerNumero])
+        this.scoreCalculator.pushTheScoreInTheFrameHistory(frameInformation.frameHistory, frameThrow)
+        return frameThrow
     }
 
     manageThePlayerThrow(checkCondition, throwInformation) {
@@ -111,65 +113,84 @@ class bowlingGameManager {
             self.scoreboard.buttonsEnterScore[playerNumero].disabled = true
             self.scoreboard.buttonsEnterScore[playerNumero].innerHTML = "Envoyé!"
 
-            const xhr = new XMLHttpRequest()
-            xhr.open("POST", '/dashboard', true)
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
-            xhr.send(JSON.stringify({ "name": name, "score": score, "date": date }))
+            self.askToTheServerThePageDashboard(name, score, date)
 
             event.preventDefault()
         })
     }
 
+    askToTheServerThePageDashboard(name, score, date) {
+        const xhr = new XMLHttpRequest()
+        xhr.open("POST", '/dashboard', true)
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+        xhr.send(JSON.stringify({ "name": name, "score": score, "date": date }))
+    }
+
     setTheSharingButton(playerNumero) {
         const self = this
         this.scoreboard.buttonsSharing[playerNumero].addEventListener("click", function(event) {
-            const xhr = new XMLHttpRequest()
-
+            const throwHistory = self.searchTheThrowHistorySeeAtTheScreen(playerNumero)
+            self.fillTheHistory(throwHistory)
             let response = null
-
             self.scoreboard.buttonsSharing[playerNumero].disabled = true
-
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    response = this.response
-                }
-            }
-
-            const throwFilled = self.scoreboard.scoreboards[playerNumero].getElementsByClassName("throwScoreboard")[0]
-            const td = throwFilled.getElementsByTagName("td")
-            const throwHistory = []
-
-            for (let i = 0; i < 21; i++) {
-                if (td[i].innerHTML == null) {
-                    throwHistory.push(" ")
-                } else {
-                    throwHistory.push(td[i].innerHTML)
-                }
-            }
-
-            xhr.open("post", "/saveScore", false);
-
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-            xhr.send(JSON.stringify({
-                "name": self.playersInformations[playerNumero].name,
-                "throwHistory": throwHistory,
-                "frameHistory": self.playersInformations[playerNumero].frameHistory,
-                "totalScore": self.playersInformations[playerNumero].totalScore
-            }))
-
-            self.scoreboard.buttonsTwitter[playerNumero].style.display = "block"
-            self.scoreboard.buttonsTwitter[playerNumero].addEventListener("click", function() {
-                window.location.href = ('https://twitter.com/intent/tweet?url=localhost:8080/score?id=' + response)
-            })
-
-            self.scoreboard.buttonsFacebook[playerNumero].style.display = "block"
-            self.scoreboard.buttonsFacebook[playerNumero].addEventListener("click", function() {
-                window.location.href = ('https://www.facebook.com/sharer/sharer.php?u=localhost:8080/score?id=' + response)
-            })
-
+            response = self.askToTheServerThePageSaveScore(response, self, playerNumero, throwHistory)
+            self.setSocialMedia(playerNumero, response)
             event.preventDefault()
         })
+    }
+
+    askToTheServerThePageSaveScore(response, self, playerNumero, throwHistory) {
+        const xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                response = this.response
+            }
+        }
+        xhr.open("post", "/saveScore", false)
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+        xhr.send(JSON.stringify({
+            "name": self.playersInformations[playerNumero].name,
+            "throwHistory": throwHistory.history,
+            "frameHistory": self.playersInformations[playerNumero].frameHistory,
+            "totalScore": self.playersInformations[playerNumero].totalScore
+        }))
+        return response
+    }
+
+    setSocialMedia(playerNumero, response) {
+        let urls = [
+            'https://www.facebook.com/sharer/sharer.php?u=localhost:8080/score?id=',
+            'https://twitter.com/intent/tweet?url=localhost:8080/score?id='
+        ]
+
+        let button = [
+            this.scoreboard.buttonsFacebook[playerNumero],
+            this.scoreboard.buttonsTwitter[playerNumero]
+        ]
+
+        for (let i = 0; i < urls.length; i++) {
+            button[i].style.display = "block"
+            button[i].addEventListener("click", function() {
+                window.location.href = (urls[i] + response)
+            })
+        }
+    }
+
+    fillTheHistory(throwHistory) {
+        for (let i = 0; i < 21; i++) {
+            if (throwHistory.td[i].innerHTML == null) {
+                throwHistory.history.push(" ")
+            } else {
+                throwHistory.history.push(throwHistory.td[i].innerHTML)
+            }
+        }
+    }
+
+    searchTheThrowHistorySeeAtTheScreen(playerNumero) {
+        const throwFilled = this.scoreboard.scoreboards[playerNumero].getElementsByClassName("throwScoreboard")[0]
+        const td = throwFilled.getElementsByTagName("td")
+        const throwHistory = []
+        return { td: td, history: throwHistory }
     }
 
     setAbandonButtonHandler() {
@@ -207,12 +228,13 @@ class bowlingGameManager {
 
     showTheWinner() {
         let betterScore = 0
+        let winners = []
         this.playersInformations.forEach(player => {
             if (player.totalScore > betterScore) {
                 betterScore = player.totalScore
             }
         })
-        let winners = []
+
         this.playersInformations.forEach(player => {
             if (player.totalScore == betterScore) {
                 winners.push(player.name)
