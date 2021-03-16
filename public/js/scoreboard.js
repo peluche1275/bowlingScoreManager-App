@@ -70,4 +70,15 @@ class scoreboard {
 
         box.innerHTML = totalScore
     }
+
+    defineAThrowInformation(throwHistory, playerNumero) {
+        return {
+            throwHistory: throwHistory,
+            previousThrow: throwHistory[throwHistory.length - 1],
+            IndexOfSlotToFill: this.defineTheIndexOfSlotToFill(playerNumero),
+            score: parseInt(this.scoreSelect[playerNumero].value),
+            playerNumero: playerNumero
+        }
+    }
+
 }

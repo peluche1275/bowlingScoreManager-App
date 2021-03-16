@@ -1,2 +1,2 @@
-const BGM = new bowlingGameManager();
-BGM.setStartButtonHandler();
+const BGM = new bowlingGameManager()
+BGM.setStartButtonHandler()

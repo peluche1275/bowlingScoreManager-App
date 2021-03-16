@@ -15,13 +15,13 @@ class scoreCalculator {
     }
 
     checkIfThePlayerCanPlay(IndexOfSlotToFill, throwHistory) {
-        let playerCanDoTheNextThrow = true;
+        let playerCanDoTheNextThrow = true
         if (IndexOfSlotToFill === 20) {
             if ((throwHistory[throwHistory.length - 1] + throwHistory[throwHistory.length - 2]) < 10) {
                 playerCanDoTheNextThrow = false
             }
-            return playerCanDoTheNextThrow
         }
+        return playerCanDoTheNextThrow
     }
 
     checkIfItIsAStrike(score, throwHistory, IndexOfSlotToFill) {
@@ -140,5 +140,35 @@ class scoreCalculator {
             totalScore += frameHistory[i]
         }
         return totalScore;
+    }
+
+    determinateDate() {
+        let current = new Date()
+        let month = (current.getMonth() + 1)
+        if (month < 10) {
+            month = "0" + month
+        }
+        return (current.getDate() + "/" + month + "/" + current.getFullYear())
+    }
+
+    checkCondition(throwInformation) {
+        return {
+            itIsTheSecondThrow: this.checkIfItIsTheSecondThrow(throwInformation.IndexOfSlotToFill),
+            playerCanPlay: this.checkIfThePlayerCanPlay(throwInformation.IndexOfSlotToFill, throwInformation.throwHistory),
+            validScore: this.checkIfThePlayerCanEnterThisScore(throwInformation.score, throwInformation.previousThrow, throwInformation.IndexOfSlotToFill)
+        }
+
+    }
+
+    determinateIfPlayerCantDoTheThrow(checkCondition) {
+        let errorMessage = null
+
+        if (checkCondition.playerCanPlay === false) {
+            errorMessage = "Vous avez atteint le nombre maximal de lancer"
+        } else if (checkCondition.itIsTheSecondThrow && checkCondition.validScore == false) {
+            errorMessage = "Vous avez ne pouvez pas faire tomber autant de quille"
+        }
+
+        return errorMessage
     }
 }

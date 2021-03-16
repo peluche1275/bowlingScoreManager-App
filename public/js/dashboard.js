@@ -1,5 +1,5 @@
 class dashboard {
     constructor() {
-        this.dashboard = document.getElementById("dashboard");
+        this.dashboard = document.getElementById("dashboard")
     }
 }
