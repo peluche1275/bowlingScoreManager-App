@@ -21,8 +21,8 @@ app.get('/', async(req, res) => {
 })
 
 app.get('/score', async(req, res) => {
-    const object = await dataBaseManager.searchInformationOfASpecificGame(parseInt(req.query.id))
-    res.render("shareScore", object)
+    const gameInformation = await dataBaseManager.searchInformationOfASpecificGame(parseInt(req.query.id))
+    res.render("shareScore", gameInformation)
 })
 
 app.post('/saveScore', async(req, res) => {

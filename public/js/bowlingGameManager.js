@@ -112,9 +112,7 @@ class bowlingGameManager {
 
             self.scoreboard.buttonsEnterScore[playerNumero].disabled = true
             self.scoreboard.buttonsEnterScore[playerNumero].innerHTML = "Envoyé!"
-
             self.askToTheServerThePageDashboard(name, score, date)
-
             event.preventDefault()
         })
     }
@@ -202,10 +200,10 @@ class bowlingGameManager {
     }
 
     checkIfPlayerFinish(IndexOfCurrentSlot, throwInformation) {
-        const condition1 = IndexOfCurrentSlot == 19 && (throwInformation.throwHistory[throwInformation.throwHistory.length - 1] + throwInformation.throwHistory[throwInformation.throwHistory.length - 2]) < 10
-        const condition2 = IndexOfCurrentSlot == 20
+        const lastSlotAfterNormalThrow = IndexOfCurrentSlot == 19 && (throwInformation.throwHistory[throwInformation.throwHistory.length - 1] + throwInformation.throwHistory[throwInformation.throwHistory.length - 2]) < 10
+        const lastSlotAfterStrikeOrPair = IndexOfCurrentSlot == 20
 
-        if (condition1 || condition2) {
+        if (lastSlotAfterNormalThrow || lastSlotAfterStrikeOrPair) {
             this.scoreboard.buttonAddThrows[throwInformation.playerNumero].disabled = true
             this.scoreboard.buttonsEnterScore[throwInformation.playerNumero].style.display = "block"
             this.scoreboard.buttonsSharing[throwInformation.playerNumero].style.display = "block"
@@ -220,7 +218,6 @@ class bowlingGameManager {
                 allPlayersFinished = false
             }
         })
-
         if (allPlayersFinished) {
             this.showTheWinner()
         }
@@ -234,13 +231,11 @@ class bowlingGameManager {
                 betterScore = player.totalScore
             }
         })
-
         this.playersInformations.forEach(player => {
             if (player.totalScore == betterScore) {
                 winners.push(player.name)
             }
         })
-
         if (winners.length == 1) {
             this.messageDisplayer.winMessage.innerHTML = "Bravo le gagnant est : " + winners[0]
         } else {

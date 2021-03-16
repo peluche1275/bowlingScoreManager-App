@@ -20,7 +20,6 @@ class nameRegister {
             const input = document.getElementById("input_" + i).value
 
             let validName = input.match(/^[a-zA-Z]\w{3,20}$/g) // The string must be between 4 and 20 characters long. It accepts letters and numbers. No spaces or special characters.
-
             if (validName === null) {
                 return false
             }

@@ -126,8 +126,8 @@ class scoreCalculator {
         return sumOfFrameScores
     }
 
-    calculateActualTotalScore(objet) {
-        const frameHistory = objet.frameHistory
+    calculateActualTotalScore(playerInformation) {
+        const frameHistory = playerInformation.frameHistory
         let totalScore = 0
 
         for (let i = 0; i < frameHistory.length; i++) {
@@ -137,12 +137,12 @@ class scoreCalculator {
     }
 
     determinateDate() {
-        let current = new Date()
-        let month = (current.getMonth() + 1)
+        let currentDateInformations = new Date()
+        let month = (currentDateInformations.getMonth() + 1)
         if (month < 10) {
             month = "0" + month
         }
-        return (current.getDate() + "/" + month + "/" + current.getFullYear())
+        return (currentDateInformations.getDate() + "/" + month + "/" + currentDateInformations.getFullYear())
     }
 
     checkCondition(throwInformation) {
@@ -162,7 +162,6 @@ class scoreCalculator {
         } else if (checkCondition.itIsTheSecondThrow && checkCondition.validScore == false) {
             errorMessage = "Vous avez ne pouvez pas faire tomber autant de quille"
         }
-
         return errorMessage
     }
 
