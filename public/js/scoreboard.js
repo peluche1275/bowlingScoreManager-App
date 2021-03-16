@@ -81,4 +81,16 @@ class scoreboard {
         }
     }
 
+    updateTheScoreboardOnTheScreen(throwInformation, playerThrow, frameThrow, frameHistory, totalScore) {
+        this.displayThePlayerThrow(throwInformation.playerNumero, throwInformation.IndexOfSlotToFill, playerThrow)
+        this.showFrameScore(throwInformation.playerNumero, frameThrow, frameHistory)
+        this.showActualTotalScore(throwInformation.playerNumero, totalScore)
+    }
+
+    defineAframeInformation(throwInformation, playerInformation) {
+        const indexOfTheFirstThrowOfTheCurrentFrame = playerInformation.indexOfTheFirstThrowOfTheCurrentFrame
+        const frameHistory = playerInformation.frameHistory
+        return { indexOfTheFirstThrowOfTheCurrentFrame, frameHistory }
+    }
+
 }

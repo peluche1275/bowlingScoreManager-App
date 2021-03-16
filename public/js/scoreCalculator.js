@@ -1,10 +1,11 @@
 class scoreCalculator {
     constructor() {}
 
-    returnThePlayerThrow(itIsTheSecondThrow, score, IndexOfSlotToFill, objet) {
-        const previousThrow = objet.throwHistory[objet.throwHistory.length - 1];
-        const pair = this.checkIfItIsAPair(itIsTheSecondThrow, score, previousThrow)
-        const strike = this.checkIfItIsAStrike(score, objet.throwHistory, IndexOfSlotToFill)
+    returnThePlayerThrow(checkCondition, throwInformation) {
+        const previousThrow = throwInformation.throwHistory[throwInformation.throwHistory.length - 1];
+        const pair = this.checkIfItIsAPair(checkCondition.itIsTheSecondThrow, throwInformation.score, previousThrow)
+        const strike = this.checkIfItIsAStrike(throwInformation.score, throwInformation.throwHistory, throwInformation.IndexOfSlotToFill)
+        let score = throwInformation.score
 
         if (pair) {
             score = "/"
@@ -59,6 +60,10 @@ class scoreCalculator {
         }
 
         throwHistory.push(score);
+    }
+
+    pushTheScoreInTheFrameHistory(frameHistory, frameThrow) {
+        frameHistory.push(frameThrow)
     }
 
     checkIfItIsTheSecondThrow(IndexOfSlotToFill) {
@@ -171,4 +176,5 @@ class scoreCalculator {
 
         return errorMessage
     }
+
 }

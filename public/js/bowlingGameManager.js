@@ -11,20 +11,12 @@ class bowlingGameManager {
     }
 
     setStartButtonHandler() {
-        // this.formRequest.buttonStart.addEventListener("click", (event) => {
-        //     this.requestTheNumbersOfPlayers()
-        //     this.formRequest.buttonStart.style.display = "none"
-        //     this.dashboard.dashboard.style.display = "none"
-        //     event.preventDefault()
-        // })
-
-        this.addClickEvent(this.formRequest.buttonStart, this.test())
-    }
-
-    test() {
-        this.requestTheNumbersOfPlayers()
-        this.formRequest.buttonStart.style.display = "none"
-        this.dashboard.dashboard.style.display = "none"
+        this.formRequest.buttonStart.addEventListener("click", (event) => {
+            this.requestTheNumbersOfPlayers()
+            this.formRequest.buttonStart.style.display = "none"
+            this.dashboard.dashboard.style.display = "none"
+            event.preventDefault()
+        })
     }
 
     requestTheNumbersOfPlayers() {
@@ -67,19 +59,44 @@ class bowlingGameManager {
     setTheButtonAddThrow(playerNumero) {
         this.scoreboard.buttonAddThrows[playerNumero].addEventListener("click", (event) => {
             const throwInformation = this.scoreboard.defineAThrowInformation(this.playersInformations[playerNumero].throwHistory, playerNumero)
+            const frameInformation = this.scoreboard.defineAframeInformation(throwInformation, this.playersInformations[playerNumero])
             const checkCondition = this.scoreCalculator.checkCondition(throwInformation)
             const playerCantPlay = this.scoreCalculator.determinateIfPlayerCantDoTheThrow(checkCondition)
 
             if (playerCantPlay != null) {
                 this.messageDisplayer.errorMessage.innerHTML = playerCantPlay
             } else {
-                this.playTheThrow(checkCondition, throwInformation)
-                const indexOfCurrentSlot = throwInformation.IndexOfSlotToFill
-                this.checkIfPlayerFinish(indexOfCurrentSlot, throwInformation)
-                this.checkIfAllPlayersFinish()
+                const playerThrow = this.manageThePlayerThrow(checkCondition, throwInformation)
+                const frameThrow = this.manageTheFrameThrow(frameInformation, playerNumero)
+                const totalScore = this.manageTheTotalScore(throwInformation)
+
+                this.scoreboard.updateTheScoreboardOnTheScreen(throwInformation, playerThrow, frameThrow, frameInformation.frameHistory, totalScore)
+                this.tryToFinishTheGame(throwInformation)
             }
             event.preventDefault()
         })
+    }
+
+    manageTheFrameThrow(frameInformation, playerNumero) {
+        return this.scoreCalculator.returnTheFrameScore(frameInformation.indexOfTheFirstThrowOfTheCurrentFrame, this.playersInformations[playerNumero])
+    }
+
+    manageThePlayerThrow(checkCondition, throwInformation) {
+        const playerThrow = this.scoreCalculator.returnThePlayerThrow(checkCondition, throwInformation)
+        this.scoreCalculator.pushTheScoreInTheThrowHistory(throwInformation.throwHistory, playerThrow)
+        return playerThrow
+    }
+
+    manageTheTotalScore(throwInformation) {
+        const totalScore = this.scoreCalculator.calculateActualTotalScore(this.playersInformations[throwInformation.playerNumero])
+        this.playersInformations[throwInformation.playerNumero].totalScore = totalScore
+        return totalScore
+    }
+
+    tryToFinishTheGame(throwInformation) {
+        const indexOfCurrentSlot = throwInformation.IndexOfSlotToFill
+        this.checkIfPlayerFinish(indexOfCurrentSlot, throwInformation)
+        this.checkIfAllPlayersFinish()
     }
 
     setTheEnterScoreInTheDashboardButton(playerNumero) {
@@ -163,21 +180,6 @@ class bowlingGameManager {
         })
     }
 
-    // A Déplacer
-
-    playTheThrow(checkCondition, throwInformation) {
-        const playerThrow = this.scoreCalculator.returnThePlayerThrow(checkCondition.itIsTheSecondThrow, throwInformation.score, throwInformation.IndexOfSlotToFill, this.playersInformations[throwInformation.playerNumero])
-        this.scoreboard.displayThePlayerThrow(throwInformation.playerNumero, throwInformation.IndexOfSlotToFill, playerThrow)
-        this.scoreCalculator.pushTheScoreInTheThrowHistory(throwInformation.throwHistory, playerThrow)
-        const indexOfTheFirstThrowOfTheCurrentFrame = this.playersInformations[throwInformation.playerNumero].indexOfTheFirstThrowOfTheCurrentFrame
-        const frameHistory = this.playersInformations[throwInformation.playerNumero].frameHistory
-        const frameThrow = this.scoreCalculator.returnTheFrameScore(indexOfTheFirstThrowOfTheCurrentFrame, this.playersInformations[throwInformation.playerNumero])
-        this.scoreboard.showFrameScore(throwInformation.playerNumero, frameThrow, frameHistory)
-        const totalScore = this.scoreCalculator.calculateActualTotalScore(this.playersInformations[throwInformation.playerNumero])
-        this.playersInformations[throwInformation.playerNumero].totalScore = totalScore
-        this.scoreboard.showActualTotalScore(throwInformation.playerNumero, totalScore)
-    }
-
     checkIfPlayerFinish(IndexOfCurrentSlot, throwInformation) {
         const condition1 = IndexOfCurrentSlot == 19 && (throwInformation.throwHistory[throwInformation.throwHistory.length - 1] + throwInformation.throwHistory[throwInformation.throwHistory.length - 2]) < 10
         const condition2 = IndexOfCurrentSlot == 20
@@ -223,12 +225,4 @@ class bowlingGameManager {
             this.messageDisplayer.winMessage.innerHTML = "Bravo les gagnants sont : " + winners.toString()
         }
     }
-
-    addClickEvent(node, functionT) {
-        node.addEventListener("click", (event) => {
-            functionT
-            event.preventDefault()
-        })
-    }
-
 }
